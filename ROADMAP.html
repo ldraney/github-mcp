@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub MCP - Roadmap</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        h1, h2, h3 { color: #24292f; }
+        .mermaid { margin: 2rem 0; }
+        .phase {
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .phase h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #d0d7de;
+            padding-bottom: 0.5rem;
+        }
+        .phase-0 { border-left: 4px solid #8250df; }
+        .phase-1 { border-left: 4px solid #0969da; }
+        .phase-2 { border-left: 4px solid #1a7f37; }
+        .phase-3 { border-left: 4px solid #bf8700; }
+        .phase-4 { border-left: 4px solid #cf222e; }
+        .phase-5 { border-left: 4px solid #6e7781; }
+        .status { font-size: 0.9em; color: #57606a; }
+        ul { margin: 0.5rem 0; }
+        li { margin: 0.25rem 0; }
+    </style>
+</head>
+<body>
+    <h1>GitHub MCP Server - Roadmap</h1>
+
+    <h2>Phase Overview</h2>
+    <pre class="mermaid">
+gantt
+    title GitHub MCP Development Phases
+    dateFormat  YYYY-MM-DD
+    section Phase 0
+    Setup & Spikes           :p0, 2024-01-01, 5d
+    section Phase 1
+    Core MCP + Manual Auth   :p1, after p0, 7d
+    section Phase 2
+    OAuth Device Flow        :p2, after p1, 5d
+    section Phase 3
+    Full Tool Coverage       :p3, after p2, 10d
+    section Phase 4
+    Webhook Events           :p4, after p3, 7d
+    section Phase 5
+    Prompts & Release        :p5, after p4, 5d
+    </pre>
+
+    <h2>Phase Dependencies</h2>
+    <pre class="mermaid">
+flowchart LR
+    P0[Phase 0<br/>Setup & Spikes]
+    P1[Phase 1<br/>Core MCP]
+    P2[Phase 2<br/>OAuth]
+    P3[Phase 3<br/>Full Tools]
+    P4[Phase 4<br/>Webhooks]
+    P5[Phase 5<br/>Release]
+
+    P0 --> P1
+    P1 --> P2
+    P1 --> P3
+    P2 --> P5
+    P3 --> P5
+    P1 --> P4
+    P4 --> P5
+
+    style P0 fill:#f3e8ff
+    style P1 fill:#dbeafe
+    style P2 fill:#dcfce7
+    style P3 fill:#fef3c7
+    style P4 fill:#fee2e2
+    style P5 fill:#f3f4f6
+    </pre>
+
+    <h2>Detailed Phases</h2>
+
+    <div class="phase phase-0">
+        <h3>Phase 0: Setup & Spikes</h3>
+        <p class="status">Foundation and research</p>
+        <ul>
+            <li>Initialize repo with structure (package.json, tsconfig)</li>
+            <li>Set up branch protection</li>
+            <li>Create issue templates</li>
+            <li>Create documentation (CLAUDE.md, user-story.html, architecture.html)</li>
+            <li><strong>Register GitHub OAuth App</strong> (github.com/settings/developers)</li>
+            <li><strong>Spike:</strong> OAuth Device Flow - Validate @octokit/auth-oauth-device</li>
+            <li><strong>Spike:</strong> smee.io webhooks - Test event forwarding</li>
+            <li><strong>Spike:</strong> Tool generation - Prototype from Octokit types</li>
+            <li>Update docs with spike findings</li>
+        </ul>
+    </div>
+
+    <div class="phase phase-1">
+        <h3>Phase 1: Core MCP + Manual Auth</h3>
+        <p class="status">Minimum viable product</p>
+        <ul>
+            <li>Basic MCP server with stdio transport</li>
+            <li>GITHUB_TOKEN env var auth</li>
+            <li>Core tools: repos, issues, pulls, users (~200 endpoints)</li>
+            <li>npx-installable package</li>
+            <li>Basic tests</li>
+        </ul>
+        <pre class="mermaid">
+flowchart LR
+    subgraph Phase 1 Components
+        CLI[CLI Entry]
+        MCP[MCP Server]
+        Auth[Env Token Auth]
+        Tools[Core Tools<br/>repos, issues,<br/>pulls, users]
+    end
+    CLI --> MCP
+    MCP --> Auth
+    MCP --> Tools
+        </pre>
+    </div>
+
+    <div class="phase phase-2">
+        <h3>Phase 2: OAuth Device Flow</h3>
+        <p class="status">Seamless authentication</p>
+        <ul>
+            <li>Register GitHub OAuth App</li>
+            <li>Implement Device Flow with PKCE</li>
+            <li>keytar token storage</li>
+            <li>CLI: github-mcp auth login/logout/status</li>
+            <li>First-run UX polish</li>
+        </ul>
+        <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant CLI
+    participant GitHub
+    participant Keychain
+
+    User->>CLI: github-mcp auth login
+    CLI->>GitHub: Request device code
+    GitHub-->>CLI: Code + URL
+    CLI->>User: Open browser, show code
+    User->>GitHub: Authorize
+    GitHub-->>CLI: Access token
+    CLI->>Keychain: Store token
+    CLI-->>User: Logged in!
+        </pre>
+    </div>
+
+    <div class="phase phase-3">
+        <h3>Phase 3: Full Tool Coverage</h3>
+        <p class="status">All 800+ endpoints</p>
+        <ul>
+            <li>Auto-generate from OpenAPI spec</li>
+            <li>All 38 Octokit categories</li>
+            <li>Toolset config (enable/disable categories)</li>
+            <li>Rate limit handling</li>
+        </ul>
+        <pre class="mermaid">
+mindmap
+    root((38 Categories))
+        Core
+            repos
+            issues
+            pulls
+            users
+        Collaboration
+            teams
+            orgs
+            projects
+        CI/CD
+            actions
+            checks
+            deployments
+        Security
+            dependabot
+            secretScanning
+            codeScanning
+        More
+            gists
+            packages
+            codespaces
+            ...
+        </pre>
+    </div>
+
+    <div class="phase phase-4">
+        <h3>Phase 4: Webhook Events</h3>
+        <p class="status">Real-time updates</p>
+        <ul>
+            <li>smee.io client integration</li>
+            <li>Event queue pub/sub</li>
+            <li>MCP resources for events</li>
+            <li>Event filtering config</li>
+        </ul>
+        <pre class="mermaid">
+flowchart LR
+    GH[GitHub] -->|webhook| Smee[smee.io]
+    Smee -->|SSE| Client[smee-client]
+    Client -->|queue| Events[Event Queue]
+    Events -->|resource| MCP[MCP Server]
+    MCP -->|notify| Claude[Claude]
+        </pre>
+    </div>
+
+    <div class="phase phase-5">
+        <h3>Phase 5: Prompts & Release</h3>
+        <p class="status">Polish and ship</p>
+        <ul>
+            <li>Prompts: code-review, issue-triage, release-notes</li>
+            <li>Documentation polish</li>
+            <li>npm publish</li>
+            <li>v1.0.0 release</li>
+        </ul>
+    </div>
+
+    <h2>Success Metrics</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Target</th>
+        </tr>
+        <tr>
+            <td>Tool Coverage</td>
+            <td>800+ endpoints (38 categories)</td>
+        </tr>
+        <tr>
+            <td>First-run to working</td>
+            <td>&lt; 60 seconds</td>
+        </tr>
+        <tr>
+            <td>Auth success rate</td>
+            <td>&gt; 99%</td>
+        </tr>
+        <tr>
+            <td>Webhook latency</td>
+            <td>&lt; 2 seconds</td>
+        </tr>
+    </table>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'neutral',
+            gantt: {
+                titleTopMargin: 25,
+                barHeight: 30
+            }
+        });
+    </script>
+</body>
+</html>

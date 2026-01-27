@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub MCP - Architecture</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        h1, h2, h3 { color: #24292f; }
+        .mermaid { margin: 2rem 0; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1rem 0;
+        }
+        th, td {
+            border: 1px solid #d0d7de;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th { background: #f6f8fa; }
+        .decision {
+            background: #fff8c5;
+            border-left: 4px solid #d4a72c;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>GitHub MCP Server - Architecture</h1>
+
+    <h2>C4 Context Diagram</h2>
+    <pre class="mermaid">
+C4Context
+    title System Context - GitHub MCP Server
+
+    Person(user, "Developer", "Uses Claude Desktop for GitHub operations")
+    System(mcp, "GitHub MCP Server", "MCP server providing GitHub API access")
+    System_Ext(claude, "Claude Desktop", "AI assistant with MCP support")
+    System_Ext(github, "GitHub API", "REST API for GitHub")
+    System_Ext(smee, "smee.io", "Webhook proxy service")
+    System_Ext(keychain, "OS Keychain", "Secure credential storage")
+
+    Rel(user, claude, "Natural language requests")
+    Rel(claude, mcp, "MCP protocol (stdio)")
+    Rel(mcp, github, "REST API calls")
+    Rel(mcp, keychain, "Token storage")
+    Rel(github, smee, "Webhook events")
+    Rel(smee, mcp, "Forwarded events")
+    </pre>
+
+    <h2>C4 Container Diagram</h2>
+    <pre class="mermaid">
+C4Container
+    title Container Diagram - GitHub MCP Server
+
+    Container(cli, "CLI", "Node.js", "Entry point, commander-based")
+    Container(server, "MCP Server", "TypeScript", "Protocol handler")
+    Container(auth, "Auth Module", "TypeScript", "OAuth Device Flow")
+    Container(tools, "Tools Module", "TypeScript", "API endpoint wrappers")
+    Container(webhooks, "Webhooks Module", "TypeScript", "Event handling")
+    Container(resources, "Resources Module", "TypeScript", "MCP resources")
+
+    ContainerDb(keytar, "Keytar", "OS Keychain", "Token storage")
+    Container_Ext(octokit, "Octokit", "npm", "GitHub API client")
+    Container_Ext(smee, "smee-client", "npm", "Webhook receiver")
+
+    Rel(cli, server, "Starts")
+    Rel(cli, auth, "Auth commands")
+    Rel(server, tools, "Registers")
+    Rel(server, resources, "Registers")
+    Rel(auth, keytar, "Store/retrieve")
+    Rel(tools, octokit, "API calls")
+    Rel(webhooks, smee, "Receives events")
+    Rel(webhooks, resources, "Publishes")
+    </pre>
+
+    <h2>Component Diagram - Tools Module</h2>
+    <pre class="mermaid">
+flowchart TB
+    subgraph Tools Module
+        gen[Generator]
+        reg[Registry]
+
+        subgraph Categories
+            repos[Repos]
+            issues[Issues]
+            pulls[Pulls]
+            users[Users]
+            actions[Actions]
+            orgs[Orgs]
+            more[...38 total]
+        end
+    end
+
+    gen -->|generates| repos
+    gen -->|generates| issues
+    gen -->|generates| pulls
+    gen -->|generates| users
+    gen -->|generates| actions
+    gen -->|generates| orgs
+
+    repos --> reg
+    issues --> reg
+    pulls --> reg
+    users --> reg
+    actions --> reg
+    orgs --> reg
+
+    reg -->|lazy load| MCP[MCP Server]
+    </pre>
+
+    <h2>Authentication Flow</h2>
+    <pre class="mermaid">
+sequenceDiagram
+    participant CLI
+    participant Auth as Auth Module
+    participant Keytar
+    participant GitHub as GitHub OAuth
+
+    CLI->>Auth: authenticate()
+    Auth->>Keytar: getToken()
+
+    alt Token exists and valid
+        Keytar-->>Auth: token
+        Auth-->>CLI: authenticated
+    else No token or expired
+        Auth->>GitHub: POST /login/device/code
+        GitHub-->>Auth: device_code, user_code, verification_uri
+        Auth->>CLI: Display code, open browser
+
+        loop Poll until authorized
+            Auth->>GitHub: POST /login/oauth/access_token
+            GitHub-->>Auth: pending / token
+        end
+
+        Auth->>Keytar: setToken(token)
+        Auth-->>CLI: authenticated
+    end
+    </pre>
+
+    <h2>Webhook Event Flow</h2>
+    <pre class="mermaid">
+flowchart LR
+    GH[GitHub] -->|POST| Smee[smee.io]
+    Smee -->|SSE| Client[smee-client]
+    Client -->|emit| Queue[Event Queue]
+    Queue -->|publish| Resource[MCP Resource]
+    Resource -->|notify| Claude[Claude Desktop]
+    </pre>
+
+    <h2>Key Technical Decisions</h2>
+
+    <div class="decision">
+        <h3>Decision: Tool Naming Convention</h3>
+        <p><strong>Choice:</strong> <code>github_&lt;category&gt;_&lt;method&gt;</code></p>
+        <p><strong>Rationale:</strong> Matches Octokit's structure, predictable for LLMs, allows category-based filtering</p>
+        <p><strong>Examples:</strong> <code>github_repos_list</code>, <code>github_issues_create</code>, <code>github_pulls_merge</code></p>
+    </div>
+
+    <div class="decision">
+        <h3>Decision: Token Storage</h3>
+        <p><strong>Choice:</strong> OS Keychain via keytar</p>
+        <p><strong>Alternatives considered:</strong> File-based (~/.github-mcp), environment variables only</p>
+        <p><strong>Rationale:</strong> Native security, no plaintext files, cross-platform</p>
+    </div>
+
+    <div class="decision">
+        <h3>Decision: Webhook Delivery</h3>
+        <p><strong>Choice:</strong> smee.io proxy</p>
+        <p><strong>Alternatives considered:</strong> Direct webhook endpoint, ngrok</p>
+        <p><strong>Rationale:</strong> No exposed ports, no account required, reliable SSE</p>
+    </div>
+
+    <div class="decision">
+        <h3>Decision: Tool Registration</h3>
+        <p><strong>Choice:</strong> Lazy loading by category</p>
+        <p><strong>Alternatives considered:</strong> All tools upfront, on-demand per tool</p>
+        <p><strong>Rationale:</strong> Balance between LLM context limits and discoverability</p>
+    </div>
+
+    <h2>Data Flow</h2>
+    <table>
+        <tr>
+            <th>Flow</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Protocol</th>
+        </tr>
+        <tr>
+            <td>MCP Communication</td>
+            <td>Claude Desktop</td>
+            <td>github-mcp</td>
+            <td>stdio (JSON-RPC)</td>
+        </tr>
+        <tr>
+            <td>GitHub API</td>
+            <td>github-mcp</td>
+            <td>api.github.com</td>
+            <td>HTTPS REST</td>
+        </tr>
+        <tr>
+            <td>OAuth Flow</td>
+            <td>github-mcp</td>
+            <td>github.com</td>
+            <td>HTTPS</td>
+        </tr>
+        <tr>
+            <td>Webhook Events</td>
+            <td>smee.io</td>
+            <td>github-mcp</td>
+            <td>SSE</td>
+        </tr>
+        <tr>
+            <td>Token Storage</td>
+            <td>github-mcp</td>
+            <td>OS Keychain</td>
+            <td>Native API</td>
+        </tr>
+    </table>
+
+    <h2>Error Handling Strategy</h2>
+    <pre class="mermaid">
+flowchart TD
+    A[API Error] --> B{Status Code}
+    B -->|401| C[Token Invalid]
+    C --> D[Clear keychain]
+    D --> E[Trigger re-auth]
+
+    B -->|403| F{Reason}
+    F -->|Rate limit| G[Return retry-after]
+    F -->|Forbidden| H[Permission error msg]
+
+    B -->|404| I[Not found - clear msg]
+    B -->|422| J[Validation error details]
+    B -->|5xx| K[GitHub down - retry]
+    </pre>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'neutral',
+            c4: {
+                diagramMarginY: 50
+            }
+        });
+    </script>
+</body>
+</html>

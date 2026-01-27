@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub MCP - User Story</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        h1, h2, h3 { color: #24292f; }
+        .mermaid { margin: 2rem 0; }
+        code {
+            background: #f6f8fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f6f8fa;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        .scenario {
+            background: #f0f7ff;
+            border-left: 4px solid #0969da;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>GitHub MCP Server - User Story</h1>
+
+    <h2>Primary User Story</h2>
+    <div class="scenario">
+        <p><strong>As a</strong> developer using Claude Desktop</p>
+        <p><strong>I want</strong> full GitHub API access through natural language</p>
+        <p><strong>So that</strong> I can manage repos, issues, PRs, and webhooks without leaving my AI assistant</p>
+    </div>
+
+    <h2>First-Run Experience</h2>
+    <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant CLI as github-mcp CLI
+    participant GitHub as GitHub OAuth
+    participant Keychain as OS Keychain
+    participant MCP as MCP Server
+
+    User->>CLI: npx github-mcp
+    CLI->>Keychain: Check for token
+    Keychain-->>CLI: No token found
+    CLI->>GitHub: Request device code
+    GitHub-->>CLI: Device code + URL
+    CLI->>User: Display code, open browser
+    User->>GitHub: Enter code at github.com/login/device
+    GitHub->>CLI: Poll... Poll... Success!
+    CLI->>Keychain: Store access token
+    CLI->>MCP: Start server
+    MCP-->>User: Ready! 800+ tools available
+    </pre>
+
+    <h2>Subsequent Runs</h2>
+    <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant CLI as github-mcp CLI
+    participant Keychain as OS Keychain
+    participant MCP as MCP Server
+
+    User->>CLI: npx github-mcp
+    CLI->>Keychain: Check for token
+    Keychain-->>CLI: Token found!
+    CLI->>MCP: Start server with token
+    MCP-->>User: Ready! (instant)
+    </pre>
+
+    <h2>Key Scenarios</h2>
+
+    <h3>Scenario 1: List My Repositories</h3>
+    <div class="scenario">
+        <p><strong>User:</strong> "Show me my recent repositories"</p>
+        <p><strong>Claude:</strong> Uses <code>github_repos_list</code> tool</p>
+        <p><strong>Result:</strong> Formatted list of user's repos with stars, forks, last updated</p>
+    </div>
+
+    <h3>Scenario 2: Create Issue from Discussion</h3>
+    <div class="scenario">
+        <p><strong>User:</strong> "Create an issue in my-app repo about the login bug we discussed"</p>
+        <p><strong>Claude:</strong> Uses <code>github_issues_create</code> with context from conversation</p>
+        <p><strong>Result:</strong> Issue created with link</p>
+    </div>
+
+    <h3>Scenario 3: Review Pull Request</h3>
+    <div class="scenario">
+        <p><strong>User:</strong> "Review PR #42 in my-app"</p>
+        <p><strong>Claude:</strong> Uses <code>github_pulls_get</code>, <code>github_pulls_listFiles</code></p>
+        <p><strong>Result:</strong> Detailed code review with suggestions</p>
+    </div>
+
+    <h3>Scenario 4: Real-time Webhook Monitoring</h3>
+    <div class="scenario">
+        <p><strong>User:</strong> "Watch for new issues in my-app"</p>
+        <p><strong>Claude:</strong> Subscribes to <code>github://webhooks/issues</code> resource</p>
+        <p><strong>Result:</strong> Notified when issues are created/updated</p>
+    </div>
+
+    <h2>Tool Categories</h2>
+    <pre class="mermaid">
+mindmap
+    root((GitHub MCP Tools))
+        Repos
+            list
+            get
+            create
+            delete
+            fork
+        Issues
+            list
+            get
+            create
+            update
+            comment
+        Pull Requests
+            list
+            get
+            create
+            merge
+            review
+        Actions
+            workflows
+            runs
+            jobs
+            artifacts
+        Users
+            get
+            list
+            followers
+            following
+        Organizations
+            list
+            get
+            members
+            teams
+        Webhooks
+            events
+            subscribe
+            filter
+    </pre>
+
+    <h2>Error Handling</h2>
+    <pre class="mermaid">
+flowchart TD
+    A[API Call] --> B{Success?}
+    B -->|Yes| C[Return Result]
+    B -->|No| D{Error Type}
+    D -->|401| E[Token expired - re-auth]
+    D -->|403| F[Rate limited - wait]
+    D -->|404| G[Not found - clear message]
+    D -->|Other| H[Descriptive error]
+    </pre>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+</body>
+</html>
