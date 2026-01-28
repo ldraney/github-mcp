@@ -3,6 +3,7 @@
 import { Command } from 'commander';
 import { getToken, login, logout, getAuthStatus } from './auth/oauth-flow.js';
 import { startServer } from './server.js';
+import { ToolGenerator } from './tools/generator.js';
 
 const program = new Command();
 
@@ -13,7 +14,11 @@ program
 
 // Default command: start server
 program
-  .action(async () => {
+  .option(
+    '-c, --categories <categories>',
+    `Comma-separated list of tool categories to load (available: ${ToolGenerator.getAvailableCategories().join(', ')})`
+  )
+  .action(async (options: { categories?: string }) => {
     try {
       let token = await getToken();
 
@@ -27,7 +32,12 @@ program
         process.exit(1);
       }
 
-      await startServer(token);
+      // Parse categories if provided
+      const categories = options.categories
+        ? options.categories.split(',').map((c) => c.trim())
+        : undefined;
+
+      await startServer(token, { categories });
     } catch (error) {
       console.error('Error:', error instanceof Error ? error.message : error);
       process.exit(1);
