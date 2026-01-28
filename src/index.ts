@@ -1,16 +1,23 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { getToken, login, logout, getAuthStatus } from './auth/oauth-flow.js';
 import { startServer } from './server.js';
 import { ToolGenerator, PRESETS, DEFAULT_PRESET } from './tools/generator.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-8'));
 
 const program = new Command();
 
 program
   .name('github-mcp')
   .description('GitHub MCP server with OAuth authentication')
-  .version('0.1.0');
+  .version(pkg.version);
 
 // Default command: start server
 program
