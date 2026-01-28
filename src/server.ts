@@ -9,6 +9,17 @@ import {
 import { Octokit } from '@octokit/rest';
 import { createToolGenerator, ToolGenerator } from './tools/generator.js';
 import { activityPrompts, getActivityPrompt } from './prompts/activity-summary.js';
+import { codeReviewPrompts, getCodeReviewPrompt } from './prompts/code-review.js';
+import { issueTriagePrompts, getIssueTriagePrompt } from './prompts/issue-triage.js';
+import { releaseNotesPrompts, getReleaseNotesPrompt } from './prompts/release-notes.js';
+
+// Combine all prompts
+const allPrompts = [
+  ...activityPrompts,
+  ...codeReviewPrompts,
+  ...issueTriagePrompts,
+  ...releaseNotesPrompts,
+];
 
 /**
  * Server startup options
@@ -68,15 +79,23 @@ export async function startServer(
   // List available prompts
   server.setRequestHandler(ListPromptsRequestSchema, async () => {
     return {
-      prompts: activityPrompts,
+      prompts: allPrompts,
     };
   });
 
   // Handle prompt requests
   server.setRequestHandler(GetPromptRequestSchema, async (request) => {
     const { name, arguments: args } = request.params;
+    const promptArgs = args ?? {};
 
-    return getActivityPrompt(name, args ?? {});
+    // Try each prompt handler
+    const result =
+      getCodeReviewPrompt(name, promptArgs) ??
+      getIssueTriagePrompt(name, promptArgs) ??
+      getReleaseNotesPrompt(name, promptArgs) ??
+      getActivityPrompt(name, promptArgs);
+
+    return result;
   });
 
   // Connect via stdio
