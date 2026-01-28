@@ -3,9 +3,12 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { Octokit } from '@octokit/rest';
 import { createToolGenerator, ToolGenerator } from './tools/generator.js';
+import { activityPrompts, getActivityPrompt } from './prompts/activity-summary.js';
 
 /**
  * Server startup options
@@ -43,6 +46,7 @@ export async function startServer(
     {
       capabilities: {
         tools: {},
+        prompts: {},
       },
     }
   );
@@ -59,6 +63,20 @@ export async function startServer(
     const { name, arguments: args } = request.params;
 
     return generator.executeTool(octokit, name, args ?? {});
+  });
+
+  // List available prompts
+  server.setRequestHandler(ListPromptsRequestSchema, async () => {
+    return {
+      prompts: activityPrompts,
+    };
+  });
+
+  // Handle prompt requests
+  server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+    const { name, arguments: args } = request.params;
+
+    return getActivityPrompt(name, args ?? {});
   });
 
   // Connect via stdio
