@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub MCP Server - User Guide</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --fg: #c9d1d9;
+            --accent: #58a6ff;
+            --border: #30363d;
+            --code-bg: #161b22;
+            --success: #3fb950;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1, h2, h3 {
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.75rem; margin-top: 2rem; }
+        h3 { font-size: 1.25rem; border: none; }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .card {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .example {
+            background: #1c2128;
+            border-left: 3px solid var(--success);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-label {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--code-bg);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .hero h1 {
+            border: none;
+            font-size: 3rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #8b949e;
+        }
+
+        .cta {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .cta:hover {
+            text-decoration: none;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>GitHub MCP Server</h1>
+        <p>327 GitHub API tools for Claude Desktop & Claude Code</p>
+        <span class="badge">v0.2.0</span>
+        <span class="badge">OAuth</span>
+        <span class="badge">MCP Prompts</span>
+        <br>
+        <a href="https://github.com/ldraney/github-mcp/releases" class="cta">Download Bundle</a>
+    </div>
+
+    <h2>Quick Start</h2>
+
+    <h3>Option 1: Claude Desktop (MCPB Bundle)</h3>
+    <ol>
+        <li>Download <code>github-mcp.mcpb</code> from <a href="https://github.com/ldraney/github-mcp/releases">Releases</a></li>
+        <li>Double-click to install</li>
+        <li>Restart Claude Desktop</li>
+        <li>On first use, authenticate via GitHub</li>
+    </ol>
+
+    <h3>Option 2: Claude Code / npx</h3>
+    <pre><code>npx @ldraney/github-mcp</code></pre>
+    <p>Or add to your <code>.mcp.json</code>:</p>
+    <pre><code>{
+  "mcpServers": {
+    "github-mcp": {
+      "command": "npx",
+      "args": ["@ldraney/github-mcp"]
+    }
+  }
+}</code></pre>
+
+    <h2>What Can You Do?</h2>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Repos & Code</h3>
+            <p>List repos, browse files, compare commits, manage branches and collaborators.</p>
+            <div class="example">
+                <div class="example-label">Try</div>
+                "Show my 5 most active repos"
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Issues & PRs</h3>
+            <p>Create, update, close issues and PRs. Add comments, labels, reviewers.</p>
+            <div class="example">
+                <div class="example-label">Try</div>
+                "List open bugs on owner/repo"
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Search</h3>
+            <p>Search repos, code, issues, users, and commits across GitHub.</p>
+            <div class="example">
+                <div class="example-label">Try</div>
+                "Find repos about MCP with 100+ stars"
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Actions & CI</h3>
+            <p>View workflows, runs, logs. Re-run failed jobs, manage secrets.</p>
+            <div class="example">
+                <div class="example-label">Try</div>
+                "Show failed workflows this week"
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Security</h3>
+            <p>Dependabot alerts, code scanning, secret scanning, advisories.</p>
+            <div class="example">
+                <div class="example-label">Try</div>
+                "Any security alerts on my repos?"
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Activity</h3>
+            <p>Track events, stars, watchers, notifications across repos.</p>
+            <div class="example">
+                <div class="example-label">Try</div>
+                "What happened on owner/repo today?"
+            </div>
+        </div>
+    </div>
+
+    <h2>Built-in Prompts</h2>
+    <p>Pre-configured workflows you can invoke:</p>
+
+    <table>
+        <tr>
+            <th>Prompt</th>
+            <th>Description</th>
+            <th>Example</th>
+        </tr>
+        <tr>
+            <td><code>github_help</code></td>
+            <td>Get help and see all capabilities</td>
+            <td>"Help me use GitHub MCP"</td>
+        </tr>
+        <tr>
+            <td><code>code_review</code></td>
+            <td>Detailed PR review with suggestions</td>
+            <td>"Review PR #42 on owner/repo"</td>
+        </tr>
+        <tr>
+            <td><code>issue_triage</code></td>
+            <td>Analyze issues, suggest labels/priority</td>
+            <td>"Triage issue #15"</td>
+        </tr>
+        <tr>
+            <td><code>release_notes</code></td>
+            <td>Generate notes between versions</td>
+            <td>"Release notes from v1.0 to v1.1"</td>
+        </tr>
+        <tr>
+            <td><code>daily_summary</code></td>
+            <td>Last 24 hours of activity</td>
+            <td>"Daily summary for owner/repo"</td>
+        </tr>
+        <tr>
+            <td><code>weekly_summary</code></td>
+            <td>Last 7 days of activity</td>
+            <td>"Weekly summary for owner/repo"</td>
+        </tr>
+    </table>
+
+    <h2>All Tool Categories</h2>
+    <p>327 tools across 32 categories:</p>
+
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Tools</th>
+            <th>Examples</th>
+        </tr>
+        <tr><td>repos</td><td>19</td><td>list, get, create, delete, branches, commits</td></tr>
+        <tr><td>issues</td><td>17</td><td>list, create, update, comments, labels</td></tr>
+        <tr><td>pulls</td><td>17</td><td>list, create, merge, reviews, files</td></tr>
+        <tr><td>actions</td><td>22</td><td>workflows, runs, jobs, artifacts, secrets</td></tr>
+        <tr><td>search</td><td>7</td><td>repos, code, issues, users, commits</td></tr>
+        <tr><td>users</td><td>18</td><td>get, update, followers, emails, keys</td></tr>
+        <tr><td>orgs</td><td>17</td><td>list, members, invitations, webhooks</td></tr>
+        <tr><td>teams</td><td>16</td><td>list, create, members, repos, discussions</td></tr>
+        <tr><td>gists</td><td>15</td><td>list, create, star, comments, forks</td></tr>
+        <tr><td>checks</td><td>12</td><td>runs, suites, annotations</td></tr>
+        <tr><td>projects</td><td>16</td><td>list, create, columns, cards</td></tr>
+        <tr><td>activity</td><td>18</td><td>events, stars, watchers, notifications</td></tr>
+        <tr><td>git</td><td>14</td><td>blobs, trees, commits, refs, tags</td></tr>
+        <tr><td>packages</td><td>27</td><td>list, get, delete, versions, restore</td></tr>
+        <tr><td>security</td><td>40+</td><td>dependabot, code scanning, secrets, advisories</td></tr>
+        <tr><td>+ more</td><td>70+</td><td>apps, billing, codespaces, copilot, reactions...</td></tr>
+    </table>
+
+    <h2>Tips for Best Results</h2>
+
+    <div class="card">
+        <h3>Be Specific</h3>
+        <p>Instead of "show issues", try "show open issues labeled 'bug' on owner/repo sorted by comments"</p>
+    </div>
+
+    <div class="card">
+        <h3>Use Natural Language</h3>
+        <p>Claude understands context. "What PRs did I open last week?" works great.</p>
+    </div>
+
+    <div class="card">
+        <h3>Chain Actions</h3>
+        <p>"Find the commit that broke the tests and show me the diff" - Claude will use multiple tools.</p>
+    </div>
+
+    <div class="card">
+        <h3>Ask for Help</h3>
+        <p>Say "help me use GitHub" or invoke the <code>github_help</code> prompt to see all capabilities.</p>
+    </div>
+
+    <h2>Authentication</h2>
+    <p>On first use, you'll authenticate via GitHub OAuth:</p>
+    <ol>
+        <li>A code appears in your terminal/Claude</li>
+        <li>Visit <a href="https://github.com/login/device">github.com/login/device</a></li>
+        <li>Enter the code</li>
+        <li>Authorize the app</li>
+        <li>Token is stored securely in your OS keychain</li>
+    </ol>
+    <p>You only need to do this once. To re-authenticate: <code>npx @ldraney/github-mcp auth login</code></p>
+
+    <h2>Links</h2>
+    <ul>
+        <li><a href="https://github.com/ldraney/github-mcp">GitHub Repository</a></li>
+        <li><a href="https://github.com/ldraney/github-mcp/releases">Releases & Downloads</a></li>
+        <li><a href="https://github.com/ldraney/github-mcp/issues">Report Issues</a></li>
+        <li><a href="https://www.npmjs.com/package/@ldraney/github-mcp">npm Package</a></li>
+    </ul>
+
+    <hr style="border-color: var(--border); margin: 2rem 0;">
+    <p style="text-align: center; color: #8b949e;">
+        Built by <a href="https://github.com/ldraney">@ldraney</a> |
+        <a href="https://github.com/ldraney/github-mcp">View Source</a>
+    </p>
+</body>
+</html>
