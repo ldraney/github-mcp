@@ -341,7 +341,7 @@ export const packagesCategory: ToolCategory = {
     // get_all_package_versions_for_package_owned_by_authenticated_user
     {
       definition: {
-        name: 'github_packages_get_all_package_versions_for_package_owned_by_authenticated_user',
+        name: 'github_packages_list_versions_for_auth_user',
         description: 'Get all package versions for a package owned by the authenticated user',
         inputSchema: {
           type: 'object',
@@ -387,7 +387,7 @@ export const packagesCategory: ToolCategory = {
     // get_all_package_versions_for_package_owned_by_user
     {
       definition: {
-        name: 'github_packages_get_all_package_versions_for_package_owned_by_user',
+        name: 'github_packages_list_versions_for_user',
         description: 'Get all package versions for a package owned by a user',
         inputSchema: {
           type: 'object',
@@ -432,7 +432,7 @@ export const packagesCategory: ToolCategory = {
     // get_all_package_versions_for_package_owned_by_org
     {
       definition: {
-        name: 'github_packages_get_all_package_versions_for_package_owned_by_org',
+        name: 'github_packages_list_versions_for_org',
         description: 'Get all package versions for a package owned by an organization',
         inputSchema: {
           type: 'object',
