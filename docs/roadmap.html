@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub MCP - Roadmap</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --fg: #c9d1d9;
+            --accent: #58a6ff;
+            --border: #30363d;
+            --code-bg: #161b22;
+            --success: #3fb950;
+            --warn: #d29922;
+            --danger: #f85149;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1, h2, h3 {
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.75rem; margin-top: 2rem; }
+        h3 { font-size: 1.25rem; border: none; }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        th { background: var(--code-bg); color: #fff; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-done { background: #1a3a2a; color: var(--success); }
+        .badge-wip { background: #3a2f1a; color: var(--warn); }
+        .badge-todo { background: #2a1a1a; color: var(--danger); }
+        .badge-core { background: #1a2a3a; color: var(--accent); }
+
+        .card {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .card h3 { margin-top: 0; color: var(--accent); }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { font-weight: 600; font-size: 1.25rem; color: #fff; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { color: var(--fg); }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a.active { color: var(--accent); }
+
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: #8b949e;
+        }
+        .footer a { color: var(--fg); }
+        .footer a:hover { color: var(--accent); }
+        .footer-credit { margin-top: 0.5rem; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">GitHub MCP</a>
+        <div class="nav-links">
+            <a href="guide.html">Guide</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="user-story.html">User Stories</a>
+            <a href="roadmap.html" class="active">Roadmap</a>
+            <a href="https://github.com/ldraney/github-mcp">GitHub</a>
+        </div>
+    </nav>
+
+    <h1>Roadmap</h1>
+
+    <h2>Preset System</h2>
+    <p>Tools are organized into <strong>33 categories</strong>, grouped into presets to stay within Claude Desktop's ~100 tool limit. Presets are defined in <code>src/tools/generator.ts</code>.</p>
+
+    <table>
+        <tr>
+            <th>Preset</th>
+            <th>Categories</th>
+            <th>Tools</th>
+            <th>Target</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td><code>core</code></td>
+            <td>repos, issues, pulls, search, users, actions, gists</td>
+            <td>109</td>
+            <td>Claude Desktop (default)</td>
+            <td><span class="badge badge-done">shipped</span></td>
+        </tr>
+        <tr>
+            <td><code>security</code></td>
+            <td>dependabot, secretScanning, codeScanning, codeSecurity, securityAdvisories</td>
+            <td>~50</td>
+            <td>Security audits</td>
+            <td><span class="badge badge-done">code done</span></td>
+        </tr>
+        <tr>
+            <td><code>org-admin</code></td>
+            <td>orgs, teams, projects, activity, users, apps</td>
+            <td>~70</td>
+            <td>Org management</td>
+            <td><span class="badge badge-done">code done</span></td>
+        </tr>
+        <tr>
+            <td><code>cicd</code></td>
+            <td>actions, checks, repos, packages</td>
+            <td>~60</td>
+            <td>CI/CD pipelines</td>
+            <td><span class="badge badge-done">code done</span></td>
+        </tr>
+        <tr>
+            <td><code>full</code></td>
+            <td>all 33 categories</td>
+            <td>327</td>
+            <td>Claude Code only</td>
+            <td><span class="badge badge-done">code done</span></td>
+        </tr>
+    </table>
+
+    <h2>All 33 Tool Categories</h2>
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Tools</th>
+            <th>Presets</th>
+            <th>Priority</th>
+        </tr>
+        <tr><td>repos</td><td>20</td><td><span class="badge badge-core">core</span> cicd</td><td>High</td></tr>
+        <tr><td>issues</td><td>17</td><td><span class="badge badge-core">core</span></td><td>High</td></tr>
+        <tr><td>pulls</td><td>15</td><td><span class="badge badge-core">core</span></td><td>High</td></tr>
+        <tr><td>search</td><td>7</td><td><span class="badge badge-core">core</span></td><td>High</td></tr>
+        <tr><td>users</td><td>16</td><td><span class="badge badge-core">core</span> org-admin</td><td>High</td></tr>
+        <tr><td>actions</td><td>17</td><td><span class="badge badge-core">core</span> cicd</td><td>High</td></tr>
+        <tr><td>gists</td><td>17</td><td><span class="badge badge-core">core</span></td><td>Medium</td></tr>
+        <tr><td>orgs</td><td>-</td><td>org-admin</td><td>High</td></tr>
+        <tr><td>teams</td><td>-</td><td>org-admin</td><td>Medium</td></tr>
+        <tr><td>projects</td><td>-</td><td>org-admin</td><td>Medium</td></tr>
+        <tr><td>activity</td><td>-</td><td>org-admin</td><td>Medium</td></tr>
+        <tr><td>checks</td><td>-</td><td>cicd</td><td>Medium</td></tr>
+        <tr><td>git</td><td>-</td><td>full</td><td>Medium</td></tr>
+        <tr><td>reactions</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>packages</td><td>-</td><td>cicd</td><td>Low</td></tr>
+        <tr><td>dependabot</td><td>-</td><td>security</td><td>Low</td></tr>
+        <tr><td>secretScanning</td><td>-</td><td>security</td><td>Low</td></tr>
+        <tr><td>codeScanning</td><td>-</td><td>security</td><td>Low</td></tr>
+        <tr><td>codeSecurity</td><td>-</td><td>security</td><td>Low</td></tr>
+        <tr><td>securityAdvisories</td><td>-</td><td>security</td><td>Low</td></tr>
+        <tr><td>apps</td><td>-</td><td>org-admin</td><td>Low</td></tr>
+        <tr><td>billing</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>codespaces</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>copilot</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>migrations</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>interactions</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>rateLimit</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>markdown</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>meta</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>emojis</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>gitignore</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>licenses</td><td>-</td><td>full</td><td>Low</td></tr>
+        <tr><td>codesOfConduct</td><td>-</td><td>full</td><td>Low</td></tr>
+    </table>
+
+    <h2>Release Status</h2>
+    <table>
+        <tr>
+            <th>Version</th>
+            <th>.mcpb</th>
+            <th>Size</th>
+            <th>Preset</th>
+            <th>Notes</th>
+        </tr>
+        <tr>
+            <td>v0.1.0</td>
+            <td><span class="badge badge-done">yes</span></td>
+            <td>3 MB</td>
+            <td>-</td>
+            <td>Initial release</td>
+        </tr>
+        <tr>
+            <td>v0.2.0-beta.3</td>
+            <td><span class="badge badge-done">yes</span></td>
+            <td>20 MB</td>
+            <td>-</td>
+            <td>Bloated - all deps bundled</td>
+        </tr>
+        <tr>
+            <td>v0.2.0</td>
+            <td><span class="badge badge-todo">no</span></td>
+            <td>-</td>
+            <td>-</td>
+            <td>Broken - released tar.gz/zip instead</td>
+        </tr>
+        <tr>
+            <td>v0.2.1</td>
+            <td><span class="badge badge-done">yes</span></td>
+            <td>23 MB</td>
+            <td>core</td>
+            <td>Fixed workflow, but bundle still bloated (<a href="https://github.com/ldraney/github-mcp/issues/66">#66</a>)</td>
+        </tr>
+    </table>
+
+    <h2>Open Work</h2>
+
+    <div class="card">
+        <h3>Reduce .mcpb bundle size (23MB &rarr; ~3MB)</h3>
+        <p><a href="https://github.com/ldraney/github-mcp/issues/66">#66</a> &mdash; Dev dependencies (typescript, tsx, @types) and unused SDK transitive deps (express, hono) are bundled. Fix: add <code>npm ci --omit=dev</code> before <code>mcpb pack</code> in release workflow, and update <code>.mcpbignore</code>.</p>
+        <span class="badge badge-todo">todo</span>
+    </div>
+
+    <div class="card">
+        <h3>Multiple .mcpb bundles per preset</h3>
+        <p>Original plan from <a href="https://github.com/ldraney/github-mcp/issues/55">#55</a>: release separate <code>github-mcp-core.mcpb</code>, <code>github-mcp-security.mcpb</code>, etc. Currently only core is bundled. Other presets work via CLI (<code>--preset security</code>) but have no .mcpb download.</p>
+        <span class="badge badge-todo">todo</span>
+    </div>
+
+    <div class="card">
+        <h3>Sync version across package.json and manifest.json</h3>
+        <p>Both files have a <code>version</code> field that can drift. Release workflow updates manifest from tag, but local manifest.json stays stale.</p>
+        <span class="badge badge-wip">low priority</span>
+    </div>
+
+    <h2>Architecture Decisions</h2>
+
+    <div class="card">
+        <h3>One .mcpb = core preset only</h3>
+        <p>Claude Desktop users get the core preset (~109 tools). Claude Code users use <code>npx @ldraney/github-mcp</code> with <code>--preset full</code> or <code>--categories</code> flag. This avoids overwhelming Claude Desktop's tool limit.</p>
+    </div>
+
+    <div class="card">
+        <h3>.mcpb is built by <code>mcpb pack</code></h3>
+        <p>The <a href="https://github.com/modelcontextprotocol/mcpb">@anthropic-ai/mcpb</a> CLI creates the bundle. It reads <code>manifest.json</code> for metadata and <code>.mcpbignore</code> for exclusions. Do not manually create archives.</p>
+    </div>
+
+    <div class="card">
+        <h3>Presets are code, not config</h3>
+        <p>Preset definitions live in <code>src/tools/generator.ts</code> as TypeScript constants. Each preset lists category names. Categories are defined in <code>src/tools/categories/*.ts</code> with tool definitions and handlers inline.</p>
+    </div>
+
+    <footer class="footer">
+        <p>
+            <a href="https://github.com/ldraney/github-mcp">GitHub</a> ·
+            <a href="https://www.npmjs.com/package/@ldraney/github-mcp">npm</a> ·
+            <a href="https://github.com/ldraney/github-mcp/issues">Issues</a>
+        </p>
+        <p class="footer-credit">Built by <a href="https://github.com/ldraney">@ldraney</a></p>
+    </footer>
+</body>
+</html>

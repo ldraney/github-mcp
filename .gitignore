@@ -38,7 +38,13 @@ pnpm-lock.yaml
 # GitHub OAuth App secrets (never commit)
 .oauth-secrets
 oauth-config.json
-.claude/
+.claude/*
+!.claude/skills/
+!.claude/CLAUDE.md
+!.claude/hooks/
+!.claude/validators/
+!.claude/loggers/
+!.claude/sop.json
 
 # Local workflow state
 .current-issue
