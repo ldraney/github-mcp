@@ -3,6 +3,7 @@ node_modules/
 
 # Build output
 dist/
+*.mcpb
 
 # IDE
 .vscode/
@@ -38,3 +39,6 @@ pnpm-lock.yaml
 .oauth-secrets
 oauth-config.json
 .claude/
+
+# Local workflow state
+.current-issue
