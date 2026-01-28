@@ -27,81 +27,22 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Create preset bundles
+      - name: Install mcpb CLI
+        run: npm install -g @anthropic-ai/mcpb
+
+      - name: Update manifest version
         run: |
-          mkdir -p bundles
           VERSION="${GITHUB_REF_NAME#v}"
+          jq --arg v "$VERSION" '.version = $v' manifest.json > manifest.tmp && mv manifest.tmp manifest.json
 
-          # Define presets and their descriptions
-          declare -A PRESETS
-          PRESETS[core]="Essential tools for daily development (~95 tools)"
-          PRESETS[security]="Security scanning and vulnerability management (~50 tools)"
-          PRESETS[org-admin]="Organization and team management (~70 tools)"
-          PRESETS[cicd]="CI/CD and automation tools (~60 tools)"
-          PRESETS[full]="All 327 tools - for Claude Code"
-
-          for preset in core security org-admin cicd full; do
-            echo "Creating bundle for preset: $preset"
-
-            # Create preset-specific directory
-            mkdir -p "bundles/github-mcp-${preset}"
-
-            # Copy dist and package files
-            cp -r dist "bundles/github-mcp-${preset}/"
-            cp package.json "bundles/github-mcp-${preset}/"
-            cp README.md "bundles/github-mcp-${preset}/"
-            cp LICENSE "bundles/github-mcp-${preset}/" 2>/dev/null || true
-
-            # Create preset-specific manifest using jq for proper JSON
-            jq -n \
-              --arg name "GitHub MCP (${preset})" \
-              --arg version "$VERSION" \
-              --arg desc "${PRESETS[$preset]}" \
-              --arg preset "$preset" \
-              '{
-                manifest_version: "0.2",
-                name: $name,
-                version: $version,
-                description: $desc,
-                author: { name: "ldraney", url: "https://github.com/ldraney" },
-                repository: { type: "git", url: "https://github.com/ldraney/github-mcp" },
-                server: {
-                  type: "node",
-                  entry_point: "dist/index.js",
-                  mcp_config: {
-                    command: "node",
-                    args: ["${__dirname}/dist/index.js", "--preset", $preset],
-                    env: {}
-                  }
-                },
-                license: "MIT"
-              }' > "bundles/github-mcp-${preset}/manifest.json"
-
-            # Create tarball
-            tar -czf "bundles/github-mcp-${preset}.tar.gz" -C bundles "github-mcp-${preset}"
-
-            # Create zip for Windows users
-            cd bundles && zip -rq "github-mcp-${preset}.zip" "github-mcp-${preset}" && cd ..
-          done
-
-          echo "Created bundles:"
-          ls -la bundles/*.tar.gz bundles/*.zip
+      - name: Create .mcpb bundle
+        run: mcpb pack
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
-          files: |
-            bundles/github-mcp-core.tar.gz
-            bundles/github-mcp-core.zip
-            bundles/github-mcp-security.tar.gz
-            bundles/github-mcp-security.zip
-            bundles/github-mcp-org-admin.tar.gz
-            bundles/github-mcp-org-admin.zip
-            bundles/github-mcp-cicd.tar.gz
-            bundles/github-mcp-cicd.zip
-            bundles/github-mcp-full.tar.gz
-            bundles/github-mcp-full.zip
+          files: github-mcp.mcpb
 
       - name: Publish to npm
         run: npm publish
