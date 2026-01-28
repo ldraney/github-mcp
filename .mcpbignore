@@ -1,34 +1,4 @@
-# Backend (separate deployment)
-backend/
-
-# Development files
-src/
-*.ts
-!*.d.ts
-
-# Build artifacts
-*.map
-*.d.ts
-
-# Documentation
-docs/
-*.md
+# Bundle is a thin npx wrapper — exclude everything except manifest.json and README.md
+*
+!manifest.json
 !README.md
-
-# Git
-.git/
-.github/
-
-# IDE
-.vscode/
-.idea/
-
-# Claude dev files
-.claude/
-poc/
-*.html
-.current-issue
-.gitignore
-tsconfig.json
-.mcpbignore
-package-lock.json

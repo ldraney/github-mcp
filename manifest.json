@@ -15,13 +15,12 @@
     "type": "node",
     "entry_point": "dist/index.js",
     "mcp_config": {
-      "command": "node",
+      "command": "npx",
       "args": [
-        "${__dirname}/dist/index.js",
+        "@ldraney/github-mcp@latest",
         "--preset",
         "core"
-      ],
-      "env": {}
+      ]
     }
   },
   "license": "MIT"
