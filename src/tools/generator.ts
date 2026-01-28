@@ -14,6 +14,12 @@ import {
   actionsCategory,
   searchCategory,
   orgsCategory,
+  gistsCategory,
+  checksCategory,
+  projectsCategory,
+  teamsCategory,
+  activityCategory,
+  gitCategory,
 } from './categories/index.js';
 
 /**
@@ -27,12 +33,21 @@ const ALL_CATEGORIES: Record<string, ToolCategory> = {
   actions: actionsCategory,
   search: searchCategory,
   orgs: orgsCategory,
+  gists: gistsCategory,
+  checks: checksCategory,
+  projects: projectsCategory,
+  teams: teamsCategory,
+  activity: activityCategory,
+  git: gitCategory,
 };
 
 /**
  * Default categories to load if none specified
  */
-const DEFAULT_CATEGORIES = ['repos', 'issues', 'pulls', 'users', 'actions', 'search', 'orgs'];
+const DEFAULT_CATEGORIES = [
+  'repos', 'issues', 'pulls', 'users', 'actions', 'search', 'orgs',
+  'gists', 'checks', 'projects', 'teams', 'activity', 'git',
+];
 
 /**
  * Tool generator that manages tool loading and execution
