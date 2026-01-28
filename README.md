@@ -163,6 +163,11 @@ npm run build
 npm start
 ```
 
+## Contact
+
+- [LinkedIn](https://www.linkedin.com/in/lucas-draney-904457133/)
+- [GitHub Issues](https://github.com/ldraney/github-mcp/issues)
+
 ## License
 
 MIT
