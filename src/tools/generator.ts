@@ -11,6 +11,9 @@ import {
   issuesCategory,
   pullsCategory,
   usersCategory,
+  actionsCategory,
+  searchCategory,
+  orgsCategory,
 } from './categories/index.js';
 
 /**
@@ -21,12 +24,15 @@ const ALL_CATEGORIES: Record<string, ToolCategory> = {
   issues: issuesCategory,
   pulls: pullsCategory,
   users: usersCategory,
+  actions: actionsCategory,
+  search: searchCategory,
+  orgs: orgsCategory,
 };
 
 /**
  * Default categories to load if none specified
  */
-const DEFAULT_CATEGORIES = ['repos', 'issues', 'pulls', 'users'];
+const DEFAULT_CATEGORIES = ['repos', 'issues', 'pulls', 'users', 'actions', 'search', 'orgs'];
 
 /**
  * Tool generator that manages tool loading and execution
