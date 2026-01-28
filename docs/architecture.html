@@ -261,9 +261,9 @@ flowchart LR
 
     <div class="decision">
         <h3>Decision: Token Storage</h3>
-        <p><strong>Choice:</strong> OS Keychain via keytar</p>
-        <p><strong>Alternatives considered:</strong> File-based (~/.github-mcp), environment variables only</p>
-        <p><strong>Rationale:</strong> Native security, no plaintext files, cross-platform</p>
+        <p><strong>Choice:</strong> OS Keychain via @napi-rs/keyring</p>
+        <p><strong>Alternatives considered:</strong> File-based (~/.github-mcp), environment variables only, keytar (replaced &mdash; required libsecret on Linux)</p>
+        <p><strong>Rationale:</strong> Native security, no plaintext files, cross-platform, prebuilt binaries with no system dependencies</p>
     </div>
 
     <div class="decision">

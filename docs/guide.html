@@ -384,13 +384,44 @@
     <h2>Authentication</h2>
     <p>On first use, you'll authenticate via GitHub OAuth:</p>
     <ol>
-        <li>A code appears in your terminal/Claude</li>
-        <li>Visit <a href="https://github.com/login/device">github.com/login/device</a></li>
-        <li>Enter the code</li>
+        <li>Your browser opens to GitHub's authorization page</li>
         <li>Authorize the app</li>
-        <li>Token is stored securely in your OS keychain</li>
+        <li>GitHub redirects back and your token is stored securely in your OS keychain</li>
     </ol>
     <p>You only need to do this once. To re-authenticate: <code>npx @ldraney/github-mcp auth login</code></p>
+
+    <div class="card">
+        <h3>macOS Keychain Prompt</h3>
+        <p>On macOS, you'll see a system dialog:</p>
+        <p><em>"node wants to use your confidential information stored in 'github-mcp' in your keychain."</em></p>
+        <p>This is expected and is a <strong>good sign</strong> &mdash; it means your GitHub token is stored in the macOS Keychain, the same encrypted vault that Safari, Mail, and other system apps use for credentials. Enter your login keychain password (your Mac login password) to allow access.</p>
+        <p>You can click <strong>Always Allow</strong> to avoid the prompt on future launches.</p>
+    </div>
+
+    <h2>Security</h2>
+    <p>GitHub MCP is designed so your credentials never touch the filesystem as plaintext.</p>
+
+    <div class="grid">
+        <div class="card">
+            <h3>OS Keychain Storage</h3>
+            <p>Your GitHub token is stored in your operating system's native credential manager &mdash; macOS Keychain, Windows Credential Manager, or Linux secret-service. These are encrypted, OS-protected stores. Your token is never written to a config file, environment file, or disk.</p>
+        </div>
+
+        <div class="card">
+            <h3>OAuth &mdash; No PATs to Manage</h3>
+            <p>Authentication uses GitHub's OAuth flow. You authorize in your browser and the token is issued directly &mdash; you never create, copy, or paste a Personal Access Token. Tokens can be revoked from your <a href="https://github.com/settings/applications">GitHub settings</a> at any time.</p>
+        </div>
+
+        <div class="card">
+            <h3>Client Secret Stays Server-Side</h3>
+            <p>The OAuth client secret is held on our backend server, never shipped in the npm package or .mcpb bundle. Your machine only ever handles the short-lived authorization code and the resulting token.</p>
+        </div>
+
+        <div class="card">
+            <h3>No Open Ports</h3>
+            <p>The OAuth callback uses a temporary local HTTP server on a random port that only listens for a single redirect, then shuts down. Webhook delivery uses smee.io (outbound SSE), so no inbound ports are ever exposed.</p>
+        </div>
+    </div>
 
     <h2>Links</h2>
     <ul>
