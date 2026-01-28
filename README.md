@@ -45,7 +45,20 @@ Add to your Claude Desktop config:
   "mcpServers": {
     "github": {
       "command": "npx",
-      "args": ["github-mcp"]
+      "args": ["@ldraney/github-mcp", "--preset", "core"]
+    }
+  }
+}
+```
+
+For security-focused work:
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["@ldraney/github-mcp", "--preset", "security"]
     }
   }
 }
@@ -65,6 +78,30 @@ github-mcp auth status   # Check auth status
 # With environment token (skips OAuth)
 GITHUB_TOKEN=ghp_xxx github-mcp
 ```
+
+### Presets
+
+Claude Desktop has a ~100 tool limit. Use presets to load only what you need:
+
+```bash
+github-mcp --preset core        # Daily dev work (~95 tools)
+github-mcp --preset security    # Security audits (~50 tools)
+github-mcp --preset org-admin   # Org management (~70 tools)
+github-mcp --preset cicd        # CI/CD automation (~60 tools)
+github-mcp --preset full        # All 327 tools (Claude Code only)
+```
+
+| Preset | Categories | Use Case |
+|--------|-----------|----------|
+| `core` (default) | repos, issues, pulls, search, users, actions, gists | Daily development |
+| `security` | dependabot, secretScanning, codeScanning, codeSecurity, securityAdvisories | Security audits |
+| `org-admin` | orgs, teams, projects, activity, users, apps | Organization management |
+| `cicd` | actions, checks, repos, packages | CI/CD pipelines |
+| `full` | all 32 categories | Claude Code with tool search |
+
+List presets: `github-mcp --list-presets`
+
+Override with custom categories: `github-mcp --categories repos,issues,pulls`
 
 ## Available Tools
 

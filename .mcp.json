@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "github-mcp": {
-      "command": "node",
-      "args": ["dist/index.js"]
+      "command": "npx",
+      "args": ["@ldraney/github-mcp@beta"]
     }
   }
 }
