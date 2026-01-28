@@ -1,4 +1,4 @@
-import keytar from 'keytar';
+import { Entry } from '@napi-rs/keyring';
 
 const SERVICE_NAME = 'github-mcp';
 const ACCOUNT_NAME = 'oauth-token';
@@ -8,9 +8,12 @@ const SCOPE_ACCOUNT = 'oauth-scopes';
  * Store token securely in OS keychain
  */
 export async function storeToken(token: string, scopes?: string): Promise<void> {
-  await keytar.setPassword(SERVICE_NAME, ACCOUNT_NAME, token);
+  const tokenEntry = new Entry(SERVICE_NAME, ACCOUNT_NAME);
+  tokenEntry.setPassword(token);
+
   if (scopes) {
-    await keytar.setPassword(SERVICE_NAME, SCOPE_ACCOUNT, scopes);
+    const scopeEntry = new Entry(SERVICE_NAME, SCOPE_ACCOUNT);
+    scopeEntry.setPassword(scopes);
   }
 }
 
@@ -18,21 +21,43 @@ export async function storeToken(token: string, scopes?: string): Promise<void> 
  * Retrieve token from OS keychain
  */
 export async function retrieveToken(): Promise<string | null> {
-  return keytar.getPassword(SERVICE_NAME, ACCOUNT_NAME);
+  try {
+    const entry = new Entry(SERVICE_NAME, ACCOUNT_NAME);
+    return entry.getPassword();
+  } catch {
+    return null;
+  }
 }
 
 /**
  * Retrieve stored scopes
  */
 export async function retrieveScopes(): Promise<string | null> {
-  return keytar.getPassword(SERVICE_NAME, SCOPE_ACCOUNT);
+  try {
+    const entry = new Entry(SERVICE_NAME, SCOPE_ACCOUNT);
+    return entry.getPassword();
+  } catch {
+    return null;
+  }
 }
 
 /**
  * Delete token from OS keychain
  */
 export async function deleteToken(): Promise<boolean> {
-  const tokenDeleted = await keytar.deletePassword(SERVICE_NAME, ACCOUNT_NAME);
-  await keytar.deletePassword(SERVICE_NAME, SCOPE_ACCOUNT);
-  return tokenDeleted;
+  try {
+    const tokenEntry = new Entry(SERVICE_NAME, ACCOUNT_NAME);
+    tokenEntry.deletePassword();
+  } catch {
+    // Token didn't exist
+  }
+
+  try {
+    const scopeEntry = new Entry(SERVICE_NAME, SCOPE_ACCOUNT);
+    scopeEntry.deletePassword();
+  } catch {
+    // Scopes didn't exist
+  }
+
+  return true;
 }
