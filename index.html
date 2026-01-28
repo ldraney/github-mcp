@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub MCP Server</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --text: #c9d1d9;
+            --accent: #58a6ff;
+            --border: #30363d;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+        }
+        .container { max-width: 800px; width: 100%; }
+        h1 { color: #fff; font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .tagline { color: #8b949e; font-size: 1.25rem; margin-bottom: 2rem; }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .feature {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+        .feature h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .cta {
+            display: inline-block;
+            background: #238636;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        .cta:hover { background: #2ea043; text-decoration: none; }
+        code {
+            background: #161b22;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GitHub MCP Server</h1>
+        <p class="tagline">Access 800+ GitHub API endpoints through the Model Context Protocol</p>
+
+        <div class="features">
+            <div class="feature">
+                <h3>Full API Coverage</h3>
+                <p>Wraps Octokit to expose all GitHub API endpoints as MCP tools.</p>
+            </div>
+            <div class="feature">
+                <h3>OAuth Device Flow</h3>
+                <p>Secure authentication without exposing tokens in config files.</p>
+            </div>
+            <div class="feature">
+                <h3>Real-time Webhooks</h3>
+                <p>Receive webhook events via smee.io proxy—no exposed ports needed.</p>
+            </div>
+            <div class="feature">
+                <h3>LLM-Friendly</h3>
+                <p>Lazy tool loading by category to avoid overwhelming context windows.</p>
+            </div>
+        </div>
+
+        <h2>Quick Start</h2>
+        <pre><code>npm install github-mcp
+npx github-mcp auth login
+npx github-mcp start</code></pre>
+
+        <a href="https://github.com/ldraney/github-mcp" class="cta">View on GitHub</a>
+    </div>
+</body>
+</html>
