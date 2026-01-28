@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.2",
   "name": "GitHub MCP",
-  "version": "0.1.0",
+  "version": "0.2.0-beta.3",
   "description": "GitHub MCP server with OAuth authentication and comprehensive API coverage",
   "author": {
     "name": "ldraney",
@@ -17,7 +17,9 @@
     "mcp_config": {
       "command": "node",
       "args": [
-        "${__dirname}/dist/index.js"
+        "${__dirname}/dist/index.js",
+        "--preset",
+        "core"
       ],
       "env": {}
     }

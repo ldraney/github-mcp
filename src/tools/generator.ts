@@ -82,16 +82,48 @@ const ALL_CATEGORIES: Record<string, ToolCategory> = {
 };
 
 /**
- * Default categories to load if none specified
+ * Preset configurations for different use cases
+ * Each preset stays under ~100 tools for Claude Desktop compatibility
  */
-const DEFAULT_CATEGORIES = [
-  'repos', 'issues', 'pulls', 'users', 'actions', 'search', 'orgs',
-  'gists', 'checks', 'projects', 'teams', 'activity', 'git',
-  'reactions', 'packages', 'dependabot', 'secretScanning', 'codeScanning',
-  'codeSecurity', 'securityAdvisories', 'apps', 'billing', 'codespaces',
-  'copilot', 'migrations', 'interactions', 'rateLimit', 'markdown',
-  'meta', 'emojis', 'gitignore', 'licenses', 'codesOfConduct',
-];
+export const PRESETS: Record<string, { description: string; categories: string[] }> = {
+  core: {
+    description: 'Essential tools for daily development (~95 tools)',
+    categories: ['repos', 'issues', 'pulls', 'search', 'users', 'actions', 'gists'],
+  },
+  security: {
+    description: 'Security scanning and vulnerability management (~50 tools)',
+    categories: ['dependabot', 'secretScanning', 'codeScanning', 'codeSecurity', 'securityAdvisories'],
+  },
+  'org-admin': {
+    description: 'Organization and team management (~70 tools)',
+    categories: ['orgs', 'teams', 'projects', 'activity', 'users', 'apps'],
+  },
+  cicd: {
+    description: 'CI/CD and automation tools (~60 tools)',
+    categories: ['actions', 'checks', 'repos', 'packages'],
+  },
+  full: {
+    description: 'All 327 tools - recommended for Claude Code only',
+    categories: [
+      'repos', 'issues', 'pulls', 'users', 'actions', 'search', 'orgs',
+      'gists', 'checks', 'projects', 'teams', 'activity', 'git',
+      'reactions', 'packages', 'dependabot', 'secretScanning', 'codeScanning',
+      'codeSecurity', 'securityAdvisories', 'apps', 'billing', 'codespaces',
+      'copilot', 'migrations', 'interactions', 'rateLimit', 'markdown',
+      'meta', 'emojis', 'gitignore', 'licenses', 'codesOfConduct',
+    ],
+  },
+};
+
+/**
+ * Default preset for Claude Desktop compatibility
+ */
+export const DEFAULT_PRESET = 'core';
+
+/**
+ * Default categories to load if none specified (uses core preset)
+ */
+const DEFAULT_CATEGORIES = PRESETS[DEFAULT_PRESET].categories;
 
 /**
  * Tool generator that manages tool loading and execution
@@ -165,6 +197,29 @@ export class ToolGenerator {
    */
   static getAvailableCategories(): string[] {
     return Object.keys(ALL_CATEGORIES);
+  }
+
+  /**
+   * Get list of available preset names
+   */
+  static getAvailablePresets(): string[] {
+    return Object.keys(PRESETS);
+  }
+
+  /**
+   * Get categories for a preset
+   */
+  static getPresetCategories(preset: string): string[] | undefined {
+    return PRESETS[preset]?.categories;
+  }
+
+  /**
+   * Get preset descriptions for help text
+   */
+  static getPresetDescriptions(): string {
+    return Object.entries(PRESETS)
+      .map(([name, config]) => `  ${name}: ${config.description}`)
+      .join('\n');
   }
 
   /**

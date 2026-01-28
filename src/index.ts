@@ -3,7 +3,7 @@
 import { Command } from 'commander';
 import { getToken, login, logout, getAuthStatus } from './auth/oauth-flow.js';
 import { startServer } from './server.js';
-import { ToolGenerator } from './tools/generator.js';
+import { ToolGenerator, PRESETS, DEFAULT_PRESET } from './tools/generator.js';
 
 const program = new Command();
 
@@ -15,10 +15,29 @@ program
 // Default command: start server
 program
   .option(
-    '-c, --categories <categories>',
-    `Comma-separated list of tool categories to load (available: ${ToolGenerator.getAvailableCategories().join(', ')})`
+    '-p, --preset <preset>',
+    `Tool preset to load (${Object.keys(PRESETS).join(', ')})`,
+    DEFAULT_PRESET
   )
-  .action(async (options: { categories?: string }) => {
+  .option(
+    '-c, --categories <categories>',
+    `Comma-separated list of tool categories (overrides preset)`
+  )
+  .option(
+    '--list-presets',
+    'Show available presets and exit'
+  )
+  .action(async (options: { preset?: string; categories?: string; listPresets?: boolean }) => {
+    // Handle --list-presets
+    if (options.listPresets) {
+      console.log('Available presets:\n');
+      console.log(ToolGenerator.getPresetDescriptions());
+      console.log('\nUsage: npx @ldraney/github-mcp --preset <preset>');
+      console.log('\nFor Claude Desktop, use "core" (default) to stay under 100 tools.');
+      console.log('For Claude Code, use "full" for all 327 tools.');
+      process.exit(0);
+    }
+
     try {
       let token = await getToken();
 
@@ -32,10 +51,24 @@ program
         process.exit(1);
       }
 
-      // Parse categories if provided
-      const categories = options.categories
-        ? options.categories.split(',').map((c) => c.trim())
-        : undefined;
+      // Determine categories: explicit categories override preset
+      let categories: string[] | undefined;
+
+      if (options.categories) {
+        categories = options.categories.split(',').map((c) => c.trim());
+        console.error(`Using custom categories: ${categories.join(', ')}`);
+      } else {
+        const preset = options.preset || DEFAULT_PRESET;
+        categories = ToolGenerator.getPresetCategories(preset);
+
+        if (!categories) {
+          console.error(`Unknown preset: ${preset}`);
+          console.error(`Available presets: ${ToolGenerator.getAvailablePresets().join(', ')}`);
+          process.exit(1);
+        }
+
+        console.error(`Using preset: ${preset}`);
+      }
 
       await startServer(token, { categories });
     } catch (error) {
