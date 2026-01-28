@@ -12,9 +12,11 @@ import { activityPrompts, getActivityPrompt } from './prompts/activity-summary.j
 import { codeReviewPrompts, getCodeReviewPrompt } from './prompts/code-review.js';
 import { issueTriagePrompts, getIssueTriagePrompt } from './prompts/issue-triage.js';
 import { releaseNotesPrompts, getReleaseNotesPrompt } from './prompts/release-notes.js';
+import { helpPrompts, getHelpPrompt } from './prompts/help.js';
 
 // Combine all prompts
 const allPrompts = [
+  ...helpPrompts,
   ...activityPrompts,
   ...codeReviewPrompts,
   ...issueTriagePrompts,
@@ -90,6 +92,7 @@ export async function startServer(
 
     // Try each prompt handler
     const result =
+      getHelpPrompt(name, promptArgs) ??
       getCodeReviewPrompt(name, promptArgs) ??
       getIssueTriagePrompt(name, promptArgs) ??
       getReleaseNotesPrompt(name, promptArgs) ??
