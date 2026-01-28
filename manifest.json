@@ -1,0 +1,26 @@
+{
+  "manifest_version": "0.2",
+  "name": "GitHub MCP",
+  "version": "0.1.0",
+  "description": "GitHub MCP server with OAuth authentication and comprehensive API coverage",
+  "author": {
+    "name": "ldraney",
+    "url": "https://github.com/ldraney"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ldraney/github-mcp"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
+      "env": {}
+    }
+  },
+  "license": "MIT"
+}
