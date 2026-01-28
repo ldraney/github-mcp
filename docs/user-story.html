@@ -6,35 +6,122 @@
     <title>GitHub MCP - User Story</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
+        :root {
+            --bg: #0d1117;
+            --fg: #c9d1d9;
+            --accent: #58a6ff;
+            --border: #30363d;
+            --code-bg: #161b22;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
             max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
             line-height: 1.6;
         }
-        h1, h2, h3 { color: #24292f; }
-        .mermaid { margin: 2rem 0; }
+
+        h1, h2, h3 {
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.75rem; margin-top: 2rem; }
+        h3 { font-size: 1.25rem; border: none; }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
         code {
-            background: #f6f8fa;
+            background: var(--code-bg);
             padding: 0.2rem 0.4rem;
-            border-radius: 3px;
+            border-radius: 4px;
+            font-size: 0.9em;
         }
+
         pre {
-            background: #f6f8fa;
+            background: var(--code-bg);
             padding: 1rem;
-            border-radius: 6px;
+            border-radius: 8px;
             overflow-x: auto;
+            border: 1px solid var(--border);
         }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .mermaid { margin: 2rem 0; }
+
         .scenario {
-            background: #f0f7ff;
-            border-left: 4px solid #0969da;
+            background: var(--code-bg);
+            border-left: 4px solid var(--accent);
             padding: 1rem;
             margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
         }
+
+        .scenario p {
+            margin: 0.5rem 0;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: #fff;
+        }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { color: var(--fg); }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a.active { color: var(--accent); }
+
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: #8b949e;
+        }
+        .footer a { color: var(--fg); }
+        .footer a:hover { color: var(--accent); }
+        .footer-credit { margin-top: 0.5rem; font-size: 0.9rem; }
     </style>
 </head>
 <body>
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">GitHub MCP</a>
+        <div class="nav-links">
+            <a href="guide.html">Guide</a>
+            <a href="architecture.html">Architecture</a>
+            <a href="user-story.html" class="active">User Stories</a>
+            <a href="https://github.com/ldraney/github-mcp">GitHub</a>
+        </div>
+    </nav>
+
     <h1>GitHub MCP Server - User Story</h1>
 
     <h2>Primary User Story</h2>
@@ -166,8 +253,17 @@ flowchart TD
     D -->|Other| H[Descriptive error]
     </pre>
 
+    <footer class="footer">
+        <p>
+            <a href="https://github.com/ldraney/github-mcp">GitHub</a> ·
+            <a href="https://www.npmjs.com/package/@ldraney/github-mcp">npm</a> ·
+            <a href="https://github.com/ldraney/github-mcp/issues">Issues</a>
+        </p>
+        <p class="footer-credit">Built by <a href="https://github.com/ldraney">@ldraney</a></p>
+    </footer>
+
     <script>
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
     </script>
 </body>
 </html>
