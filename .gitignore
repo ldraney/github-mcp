@@ -37,3 +37,4 @@ pnpm-lock.yaml
 # GitHub OAuth App secrets (never commit)
 .oauth-secrets
 oauth-config.json
+.claude/

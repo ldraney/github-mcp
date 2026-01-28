@@ -1,0 +1,34 @@
+# Backend (separate deployment)
+backend/
+
+# Development files
+src/
+*.ts
+!*.d.ts
+
+# Build artifacts
+*.map
+*.d.ts
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Git
+.git/
+.github/
+
+# IDE
+.vscode/
+.idea/
+
+# Claude dev files
+.claude/
+poc/
+*.html
+.current-issue
+.gitignore
+tsconfig.json
+.mcpbignore
+package-lock.json
