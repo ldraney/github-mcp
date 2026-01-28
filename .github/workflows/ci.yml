@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Test presets
+        run: |
+          echo "Testing --list-presets"
+          node dist/index.js --list-presets
+
+          echo ""
+          echo "Verifying preset categories..."
+          for preset in core security org-admin cicd full; do
+            echo "Checking preset: $preset"
+            node -e "
+              import { PRESETS } from './dist/tools/generator.js';
+              const p = PRESETS['$preset'];
+              if (!p) {
+                console.error('Preset $preset not found');
+                process.exit(1);
+              }
+              console.log('  Categories:', p.categories.join(', '));
+              console.log('  Description:', p.description);
+            "
+          done
