@@ -39,7 +39,7 @@
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@octokit/rest": "^21.0.0",
     "commander": "^12.1.0",
-    "keytar": "^7.9.0",
+    "@napi-rs/keyring": "^1.2.0",
     "open": "^10.1.0"
   },
   "devDependencies": {
