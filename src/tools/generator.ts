@@ -20,6 +20,26 @@ import {
   teamsCategory,
   activityCategory,
   gitCategory,
+  reactionsCategory,
+  packagesCategory,
+  dependabotCategory,
+  secretScanningCategory,
+  codeScanningCategory,
+  codeSecurityCategory,
+  securityAdvisoriesCategory,
+  appsCategory,
+  billingCategory,
+  codespacesCategory,
+  copilotCategory,
+  migrationsCategory,
+  interactionsCategory,
+  rateLimitCategory,
+  markdownCategory,
+  metaCategory,
+  emojisCategory,
+  gitignoreCategory,
+  licensesCategory,
+  codesOfConductCategory,
 } from './categories/index.js';
 
 /**
@@ -39,6 +59,26 @@ const ALL_CATEGORIES: Record<string, ToolCategory> = {
   teams: teamsCategory,
   activity: activityCategory,
   git: gitCategory,
+  reactions: reactionsCategory,
+  packages: packagesCategory,
+  dependabot: dependabotCategory,
+  secretScanning: secretScanningCategory,
+  codeScanning: codeScanningCategory,
+  codeSecurity: codeSecurityCategory,
+  securityAdvisories: securityAdvisoriesCategory,
+  apps: appsCategory,
+  billing: billingCategory,
+  codespaces: codespacesCategory,
+  copilot: copilotCategory,
+  migrations: migrationsCategory,
+  interactions: interactionsCategory,
+  rateLimit: rateLimitCategory,
+  markdown: markdownCategory,
+  meta: metaCategory,
+  emojis: emojisCategory,
+  gitignore: gitignoreCategory,
+  licenses: licensesCategory,
+  codesOfConduct: codesOfConductCategory,
 };
 
 /**
@@ -47,6 +87,10 @@ const ALL_CATEGORIES: Record<string, ToolCategory> = {
 const DEFAULT_CATEGORIES = [
   'repos', 'issues', 'pulls', 'users', 'actions', 'search', 'orgs',
   'gists', 'checks', 'projects', 'teams', 'activity', 'git',
+  'reactions', 'packages', 'dependabot', 'secretScanning', 'codeScanning',
+  'codeSecurity', 'securityAdvisories', 'apps', 'billing', 'codespaces',
+  'copilot', 'migrations', 'interactions', 'rateLimit', 'markdown',
+  'meta', 'emojis', 'gitignore', 'licenses', 'codesOfConduct',
 ];
 
 /**
