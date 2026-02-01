@@ -1,10 +1,10 @@
 # github-mcp
 
-A comprehensive GitHub MCP server with OAuth Device Flow authentication and 800+ endpoint coverage.
+A comprehensive GitHub MCP server with OAuth Device Flow authentication and 327 endpoint coverage.
 
 ## Features
 
-- **800+ GitHub API endpoints** as MCP tools (vs ~50 in official server)
+- **327 GitHub API endpoints** as MCP tools (vs ~50 in official server)
 - **OAuth Device Flow** - No PAT management, just authenticate in browser
 - **OS Keychain storage** - Secure token storage via keytar
 - **Real-time webhooks** - GitHub events as MCP resources via smee.io
@@ -84,10 +84,10 @@ GITHUB_TOKEN=ghp_xxx github-mcp
 Claude Desktop has a ~100 tool limit. Use presets to load only what you need:
 
 ```bash
-github-mcp --preset core        # Daily dev work (~95 tools)
-github-mcp --preset security    # Security audits (~50 tools)
-github-mcp --preset org-admin   # Org management (~70 tools)
-github-mcp --preset cicd        # CI/CD automation (~60 tools)
+github-mcp --preset core        # Daily dev work (~109 tools)
+github-mcp --preset security    # Security audits (~38 tools)
+github-mcp --preset org-admin   # Org management (~92 tools)
+github-mcp --preset cicd        # CI/CD automation (~71 tools)
 github-mcp --preset full        # All 327 tools (Claude Code only)
 ```
 
@@ -97,7 +97,7 @@ github-mcp --preset full        # All 327 tools (Claude Code only)
 | `security` | dependabot, secretScanning, codeScanning, codeSecurity, securityAdvisories | Security audits |
 | `org-admin` | orgs, teams, projects, activity, users, apps | Organization management |
 | `cicd` | actions, checks, repos, packages | CI/CD pipelines |
-| `full` | all 32 categories | Claude Code with tool search |
+| `full` | all 33 categories | Claude Code with tool search |
 
 List presets: `github-mcp --list-presets`
 
@@ -115,7 +115,7 @@ Tools are organized by GitHub API category:
 | `github_users_*` | get, list, followers |
 | `github_actions_*` | workflows, runs, jobs |
 | `github_gists_*` | list, get, create |
-| ... | 38 categories total |
+| ... | 33 categories total |
 
 ## Webhook Events
 
@@ -147,7 +147,7 @@ Environment variables:
 
 | Feature | Official (Go) | github-mcp |
 |---------|---------------|------------|
-| Endpoints | ~50 | 800+ |
+| Endpoints | ~50 | 327 |
 | Auth | PAT only | OAuth Device Flow |
 | Webhooks | No | Yes (smee.io) |
 | Install | Docker | npx |
