@@ -1,7 +1,7 @@
 {
   "name": "@ldraney/github-mcp",
-  "version": "0.2.4",
-  "description": "GitHub MCP server with OAuth and 800+ API endpoints",
+  "version": "0.3.0",
+  "description": "GitHub MCP server with OAuth and 327 API endpoints",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

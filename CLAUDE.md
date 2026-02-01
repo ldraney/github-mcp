@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a GitHub MCP (Model Context Protocol) server that wraps Octokit to provide 800+ GitHub API endpoints as MCP tools, with OAuth Device Flow authentication and real-time webhook event handling.
+This is a GitHub MCP (Model Context Protocol) server that wraps Octokit to provide 327 GitHub API endpoints as MCP tools, with OAuth Device Flow authentication and real-time webhook event handling.
 
 ## Quick Start
 
